@@ -42,6 +42,43 @@ namespace SchoopFunctionApp
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
+            try
+            {
+                string schoopID = req.Query["schoopID"];
+
+                string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+                dynamic data = JsonConvert.DeserializeObject(requestBody);
+                schoopID = schoopID ?? data?.schoopID;
+
+                int schId = 0;
+                var strJSON = new List<School> { };
+                if (int.TryParse(schoopID, out schId))
+                {
+                    if (schId > 0)
+                    {
+                        if (_dataServices == null)
+                        {
+                            _dataServices = new DataServices();
+                        }
+                        var school = _dataServices.GetSchoolByID(schId);
+                        strJSON.Add(school);
+                    }
+                    return strJSON.ToArray();
+                }
+            }
+            catch (Exception ex) {
+                log.LogError(ex.Message);
+            }
+
+            return setErrorCode(0);
+        }
+
+
+        [FunctionName("GetSchoolV2")]
+        public static async Task<object> GetSchoolV2(
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+            ILogger log)
+        {
             string schoopID = req.Query["schoopID"];
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
@@ -52,9 +89,9 @@ namespace SchoopFunctionApp
             var strJSON = new List<School> { };
             if (int.TryParse(schoopID, out schId))
             {
-                if(schId > 0)
+                if (schId > 0)
                 {
-                    if(_dataServices == null)
+                    if (_dataServices == null)
                     {
                         _dataServices = new DataServices();
                     }
@@ -66,7 +103,6 @@ namespace SchoopFunctionApp
 
             return setErrorCode(0);
         }
-
 
 
         #region public functions
