@@ -250,4 +250,83 @@ namespace SchoopFunctionApp.Models
 
         public string School_news_active_groups { get; set; }
     }
+
+    public class schoolsFromTownID
+    {
+        public string schName;
+        public int schoopID;
+
+        public schoolsFromTownID(string m_name, int m_ID)
+        {
+            schName = m_name;
+            schoopID = m_ID;
+        }
+    }
+
+    public class SchoolEvents
+    {
+        public int School_Event_ID { get; set; }
+
+        public string School_Event_month { get; set; }
+
+        public string School_Event_start_date { get; set; }
+
+        public string School_Event_end_date { get; set; }
+
+        public string School_Event_start_time { get; set; }
+
+        public string School_Event_end_time { get; set; }
+
+        public string School_Event_title { get; set; }
+
+        public string School_Event_location { get; set; }
+
+        public string School_Event_cost { get; set; }
+
+        public string School_Event_contact { get; set; }
+
+        public string School_Event_text { get; set; }
+
+        public string School_Event_active_years { get; set; }
+
+        public string School_Event_active_groups { get; set; }
+
+        public int School_Event_type_ID { get; set; }
+
+        public string displayDate { get; set; }
+    }
+
+    public class SchoolAlerts
+    {
+        public int Alert_ID { get; set; }
+
+        public string Alert_date_time { get; set; }
+
+        public string Activeyears { get; set; }
+
+        public string ActiveGroups { get; set; }
+
+        public bool Alert_urgent { get; set; }
+
+        public string Alert_text { get; set; }
+
+        public int nID { get; set; } //news id
+        public int eID { get; set; } //event id
+        public string fID { get; set; } //survey url
+        public int sc { get; set; } //suggested schoopID
+
+        public SchoolAlerts(int alert_ID, string alert_date_time, string active_years, string active_groups, bool alert_urgent, string alert_text, int nid, int eid, string fid, int schoopId)
+        {
+            Alert_ID = alert_ID;
+            Alert_date_time = alert_date_time;
+            Activeyears = string.IsNullOrEmpty(active_years) ? "" : active_years;
+            ActiveGroups = active_groups;
+            Alert_urgent = alert_urgent;
+            Alert_text = string.IsNullOrEmpty(alert_text) ? "" : alert_text;
+            nID = nid;
+            eID = eid;
+            fID = fid;
+            sc = schoopId;
+        }
+    }
 }
