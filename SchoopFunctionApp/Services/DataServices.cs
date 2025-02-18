@@ -40,8 +40,8 @@ namespace SchoopFunctionApp.Services
                         schWeb = reader["WebsiteAddress"].ToString(),
                         schHead = reader["HeadTitle"].ToString() + " " + reader["HeadFirstName"].ToString() + " " + reader["HeadLastName"].ToString(),
                         schActive = (bool)reader["IsActive"],
-                        hasYears = (bool?)reader["hasYears"] ?? false,
-                        hasGroups = (bool?)reader["hasGroups"] ?? false,
+                        hasYears = reader["hasYears"] is DBNull ? false : (bool)reader["hasYears"],
+                        hasGroups = reader["hasGroups"] is DBNull ? false : (bool)reader["hasGroups"],
                         organisationTypeName = "",
                     };
                     return school;
@@ -78,8 +78,8 @@ namespace SchoopFunctionApp.Services
                         schWeb = reader["WebsiteAddress"].ToString(),
                         schHead = reader["HeadTitle"].ToString() + " " + reader["HeadFirstName"].ToString() + " " + reader["HeadLastName"].ToString(),
                         schActive = (bool)reader["IsActive"],
-                        hasYears = (bool?)reader["hasYears"] ?? false,
-                        hasGroups = (bool?)reader["hasGroups"] ?? false,
+                        hasYears = reader["hasYears"] is DBNull ? false : (bool)reader["hasYears"],
+                        hasGroups = reader["hasGroups"] is DBNull ? false : (bool)reader["hasGroups"],
                         organisationTypeName = reader["Org_name"].ToString(),
                         channelDescription = reader["channelDescription"].ToString(),
                         channelLogo = reader["LogoUrl"].ToString(),
@@ -676,7 +676,7 @@ namespace SchoopFunctionApp.Services
                     {
                         Event_id = (int)reader["Event_id"],
                         Event_end_date = (DateTime)reader["Event_end_date"],
-                        Event_cost = (decimal?)reader["Event_cost"],
+                        Event_cost = reader["Event_cost"] is DBNull ? null : (decimal?)reader["Event_cost"],
                         ActiveYears = reader["ActiveYears"].ToString(),
                         ActiveGroups = reader["ActiveGroups"].ToString(),
                     };
@@ -774,6 +774,7 @@ namespace SchoopFunctionApp.Services
                               ,[Event_cost]
                               ,[Event_text]
                               ,[Event_contact_details]
+                              ,[Event_active]
                               ,[Language_id]
                               ,[ActiveYears]
                           FROM [dbo].[tbl_school_events]
@@ -793,9 +794,10 @@ namespace SchoopFunctionApp.Services
                         Event_start_time = (DateTime)reader["Event_start_time"],
                         Event_end_time = (DateTime)reader["Event_end_time"],
                         Event_location = reader["Event_location"].ToString(),
-                        Event_cost = (decimal?)reader["Event_cost"],
+                        Event_cost = reader["Event_cost"] is DBNull ? null : (decimal?)reader["Event_cost"],
                         Event_text = reader["Event_text"].ToString(),
                         Event_contact_details = reader["Event_contact_details"].ToString(),
+                        Event_active = (bool)reader["Event_active"],
                         Language_id = (int)reader["Language_id"],
                         ActiveYears = reader["ActiveYears"].ToString(),
                     };
@@ -911,15 +913,15 @@ namespace SchoopFunctionApp.Services
                     {
                         Alert_id = (int)reader["Alert_id"],
                         Alert_text = reader["Alert_text"].ToString(),
-                        SurveyGuid = (Guid?)reader["SurveyGuid"],
+                        SurveyGuid = reader["SurveyGuid"] is DBNull ? null : (Guid?)reader["SurveyGuid"],
                         Schoop_id = (int)reader["Schoop_id"],
-                        Alert_date_time = (DateTime?)reader["Alert_date_time"],
+                        Alert_date_time = reader["Alert_date_time"] is DBNull ? null : (DateTime?)reader["Alert_date_time"],
                         Activeyears = reader["Activeyears"].ToString(),
                         ActiveGroups = reader["ActiveGroups"].ToString(),
                         Alert_urgent = (bool)reader["Alert_urgent"],
-                        NewsId = (int?)reader["NewsId"],
-                        EventId = (int?)reader["EventId"],
-                        suggestedSchoopID = (int?)reader["suggestedSchoopID"],
+                        NewsId = reader["NewsId"] is DBNull ? null : (int?)reader["NewsId"],
+                        EventId = reader["EventId"] is DBNull ? null : (int?)reader["EventId"],
+                        suggestedSchoopID = reader["suggestedSchoopID"] is DBNull ? null : (int?)reader["suggestedSchoopID"],
                     };
                     list.Add(alert);
                 }
@@ -970,15 +972,15 @@ namespace SchoopFunctionApp.Services
                     {
                         Alert_id = (int)reader["Alert_id"],
                         Alert_text = reader["Alert_text"].ToString(),
-                        SurveyGuid = (Guid?)reader["SurveyGuid"],
+                        SurveyGuid = reader["SurveyGuid"] is DBNull ? null : (Guid)reader["SurveyGuid"],
                         Schoop_id = (int)reader["Schoop_id"],
-                        Alert_date_time = (DateTime?)reader["Alert_date_time"],
+                        Alert_date_time = reader["Alert_date_time"] is DBNull ? null :  (DateTime?)reader["Alert_date_time"],
                         Activeyears = reader["Activeyears"].ToString(),
                         ActiveGroups = reader["ActiveGroups"].ToString(),
                         Alert_urgent = (bool)reader["Alert_urgent"],
-                        NewsId = (int?)reader["NewsId"],
-                        EventId = (int?)reader["EventId"],
-                        suggestedSchoopID = (int?)reader["suggestedSchoopID"],
+                        NewsId = reader["NewsId"] is DBNull ? null : (int)reader["NewsId"],
+                        EventId = reader["EventId"] is DBNull ? null : (int)reader["EventId"],
+                        suggestedSchoopID = reader["suggestedSchoopID"] is DBNull ? null : (int)reader["suggestedSchoopID"],
                     };
                     return alert;
                 }
@@ -1024,21 +1026,21 @@ namespace SchoopFunctionApp.Services
                     {
                         Alert_id = (int)reader["Alert_id"],
                         Alert_text = reader["Alert_text"].ToString(),
-                        SurveyGuid = (Guid?)reader["SurveyGuid"],
+                        SurveyGuid = reader["SurveyGuid"] is DBNull ? null : (Guid?)reader["SurveyGuid"],
                         Schoop_id = (int)reader["Schoop_id"],
-                        Alert_date_time = (DateTime?)reader["Alert_date_time"],
+                        Alert_date_time = reader["Alert_date_time"] is DBNull ? null : (DateTime?)reader["Alert_date_time"],
                         Activeyears = reader["Activeyears"].ToString(),
                         ActiveGroups = reader["ActiveGroups"].ToString(),
                         Alert_urgent = (bool)reader["Alert_urgent"],
-                        NewsId = (int?)reader["NewsId"],
-                        EventId = (int?)reader["EventId"],
-                        suggestedSchoopID = (int?)reader["suggestedSchoopID"],
+                        NewsId = reader["NewsId"] is DBNull ? null : (int?)reader["NewsId"],
+                        EventId = reader["EventId"] is DBNull ? null : (int?)reader["EventId"],
+                        suggestedSchoopID = reader["suggestedSchoopID"] is DBNull ? null : (int?)reader["suggestedSchoopID"],
                         CustomDateFormat = reader["CustomDateFormat"].ToString(),
                         EstablishmentName = reader["EstablishmentName"].ToString(),
                         SendByDeviceIds = (bool)reader["SendByDeviceIds"],
                         IsContactFormAlert= (bool)reader["IsContactFormAlert"],
                         IsMigrateAlert = (bool)reader["IsMigrateAlert"],
-                        Language_id = (int?)reader["Language_id"],
+                        Language_id = reader["Language_id"] is DBNull ? null : (int?)reader["Language_id"],
                     };
                     list.Add(alert);
                 }
@@ -1100,7 +1102,7 @@ namespace SchoopFunctionApp.Services
                         groupID = (int)reader["groupID"],
                         schoopID = (int)reader["schoopID"],
                         activeYears = reader["activeYears"].ToString(),
-                        lastUpdatedOn = (DateTime?)reader["lastUpdatedOn"],
+                        lastUpdatedOn = reader["lastUpdatedOn"] is DBNull ? null : (DateTime?)reader["lastUpdatedOn"],
                         displayOrder = (decimal)reader["displayOrder"],
                         parentGroupID = (int)reader["parentGroupID"],
                         IsClosed = (bool)reader["IsClosed"],
@@ -1163,7 +1165,7 @@ namespace SchoopFunctionApp.Services
                         groupID = (int)reader["groupID"],
                         schoopID = (int)reader["schoopID"],
                         activeYears = reader["activeYears"].ToString(),
-                        lastUpdatedOn = (DateTime?)reader["lastUpdatedOn"],
+                        lastUpdatedOn = reader["lastUpdatedOn"] is DBNull ? null : (DateTime?)reader["lastUpdatedOn"],
                         displayOrder = (decimal)reader["displayOrder"],
                         parentGroupID = (int)reader["parentGroupID"],
                         IsClosed = (bool)reader["IsClosed"],
@@ -1197,7 +1199,7 @@ namespace SchoopFunctionApp.Services
                         groupID = (int)reader["groupID"],
                         schoopID = (int)reader["schoopID"],
                         activeYears = reader["activeYears"].ToString(),
-                        lastUpdatedOn = (DateTime?)reader["lastUpdatedOn"],
+                        lastUpdatedOn = reader["lastUpdatedOn"] is DBNull ? null : (DateTime?)reader["lastUpdatedOn"],
                         displayOrder = (decimal)reader["displayOrder"],
                         parentGroupID = (int)reader["parentGroupID"],
                         IsClosed = (bool)reader["IsClosed"],

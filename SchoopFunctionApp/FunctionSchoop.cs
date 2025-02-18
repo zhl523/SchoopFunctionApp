@@ -45,6 +45,7 @@ namespace SchoopFunctionApp
             return new OkObjectResult(responseMessage);
         }
 
+        //https://schoopfunctionapp.azurewebsites.net/api/GetSchool?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&schoopID=123
         [FunctionName("GetSchool")]
         public static async Task<object> GetSchool(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -71,17 +72,17 @@ namespace SchoopFunctionApp
                         var school = _dataServices.GetSchoolByID(schId);
                         strJSON.Add(school);
                     }
-                    return strJSON.ToArray();
+                    return setFormatResult(strJSON.ToArray());
                 }
             }
             catch (Exception ex) {
                 log.LogError(ex.Message);
             }
 
-            return setErrorCode(0);
+            return setFormatResult(setErrorCode(0));
         }
 
-
+        //https://schoopfunctionapp.azurewebsites.net/api/GetSchoolV2?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&schoopID=123
         [FunctionName("GetSchoolV2")]
         public static async Task<object> GetSchoolV2(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -108,7 +109,7 @@ namespace SchoopFunctionApp
                         var school = _dataServices.GetSchoolByIDV2(schId);
                         strJSON.Add(school);
                     }
-                    return strJSON.ToArray();
+                    return setFormatResult(strJSON.ToArray());
                 }
             }
             catch (Exception ex)
@@ -116,10 +117,11 @@ namespace SchoopFunctionApp
                 log.LogError(ex.Message);
             }
 
-            return setErrorCode(0);
+            return setFormatResult(setErrorCode(0));
         }
 
 
+        //https://schoopfunctionapp.azurewebsites.net/api/DeviceIDRegister?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&deviceToken=xxxxxxxx&deviceTypeID=1&deviceOSVersion=1.0&languageID=1
         [FunctionName("DeviceIDRegister")]
         public static async Task<object> DeviceIDRegister(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -141,19 +143,19 @@ namespace SchoopFunctionApp
                 languageID = languageID ?? data?.languageID;
 
                 if (string.IsNullOrEmpty(deviceToken)) {
-                    return setErrorCode(0);
+                    return setFormatResult(setErrorCode(0));
                 }
                 string deviceIDTrimmed = deviceToken.Replace("'", "").Replace("\"", ""); //remove unsafe characters like ' or ", add on 20161026
 
                 int typeId = 0;
                 if (!int.TryParse(deviceTypeID, out typeId))
                 {
-                    return setErrorCode(0);
+                    return setFormatResult(setErrorCode(0));
                 }
                 int langId = 0;
                 if (!int.TryParse(languageID, out langId))
                 {
-                    return setErrorCode(0);
+                    return setFormatResult(setErrorCode(0));
                 }
                 string devicePlatform = GetDevicePlatform(typeId);
                 if (_dataServices == null)
@@ -182,11 +184,11 @@ namespace SchoopFunctionApp
                         groups.Add(2575);
                     }
                     _dataServices.SetActiveGroups(newDeviceId, 2820, groups);
-                    return new
+                    return setFormatResult(new
                     {
                         res = 1,
                         deviceID = newDeviceId.ToString()
-                    };
+                    });
                 }
                 var objAlphaNumericPattern = new Regex("^[0-9a-zA-Z-_.,:-]{1,4096}$");
 
@@ -218,15 +220,15 @@ namespace SchoopFunctionApp
                         _dataServices.SetActiveGroups(newDeviceId, 2820, groups);
 
 
-                        return new
+                        return setFormatResult(new
                         {
                             res = 1,
                             deviceID = newDeviceId.ToString()
-                        };
+                        });
                     }
                     else
                     {
-                        return setErrorCode(5);
+                        return setFormatResult(setErrorCode(5));
 
                     }
                 }
@@ -239,17 +241,17 @@ namespace SchoopFunctionApp
                         if (typeId == 1 || typeId == 2) //only for IOS or Android
                         {
                             //RegistNHByDeviceID(device.deviceID);
-                            return new
+                            return setFormatResult(new
                             {
                                 res = 45,
                                 deviceID = device.deviceID,
                                 mySchools = _dataServices.GetActiveYearByDeviceID(device.deviceID)
-                            };
+                            });
                         }
 
                     }
 
-                    return setErrorCode(2);
+                    return setFormatResult(setErrorCode(2));
                 }
             }
             catch (Exception ex)
@@ -257,9 +259,10 @@ namespace SchoopFunctionApp
                 log.LogError(ex.Message);
             }
 
-            return setErrorCode(0);
+            return setFormatResult(setErrorCode(0));
         }
 
+        //https://schoopfunctionapp.azurewebsites.net/api/DeviceTokenUpdate?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&deviceToken=xxxxxxxx2&deviceID=1
         [FunctionName("DeviceTokenUpdate")]
         public static async Task<object> DeviceTokenUpdate(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -300,21 +303,21 @@ namespace SchoopFunctionApp
                         if (device.deviceTypeID == 1 || device.deviceTypeID == 2) //only for IOS or Android
                         {
                             //UpdateNHRegistration(device);
-                            return new
+                            return setFormatResult(new
                             {
                                 res = 45,
                                 deviceID = device.deviceID,
                                 mySchools = _dataServices.GetActiveYearByDeviceID(device.deviceID)
-                            };
+                            });
                         }
-                        return new
+                        return setFormatResult(new
                         {
                             res = 1
-                        };
+                        });
                     }
                 }
 
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             catch (Exception ex)
             {
@@ -327,6 +330,7 @@ namespace SchoopFunctionApp
             }
         }
 
+        //https://schoopfunctionapp.azurewebsites.net/api/DeviceTypeIDUpdate?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&deviceTypeID=2&deviceID=1
         [FunctionName("DeviceTypeIDUpdate")]
         public static async Task<object> DeviceTypeIDUpdate(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -364,14 +368,14 @@ namespace SchoopFunctionApp
                     //Update tbl_devices
                     if (_dataServices.UpdateDeviceTypeIdByDeviceID(typeId, dId))
                     {
-                        return new
+                        return setFormatResult(new
                         {
                             res = 1
-                        };
+                        });
                     }
                 }
 
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             catch (Exception ex)
             {
@@ -384,6 +388,7 @@ namespace SchoopFunctionApp
             }
         }
 
+        //https://schoopfunctionapp.azurewebsites.net/api/SetActiveYears?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&schoopID=123&deviceID=1&activeyears=|1|2|3|
         [FunctionName("SetActiveYears")]
         public static async Task<object> SetActiveYears(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -409,7 +414,7 @@ namespace SchoopFunctionApp
             int schId = 0;
             if (!int.TryParse(schoopID, out schId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             try
             {
@@ -421,7 +426,7 @@ namespace SchoopFunctionApp
                 var device = _dataServices.GetDeviceByDeviceId(dId);
                 if (device == null)
                 {
-                    return setErrorCode(0);
+                    return setFormatResult(setErrorCode(0));
                 }
 
                 _dataServices.SetActiveYears(dId, schId, activeyears);
@@ -473,7 +478,7 @@ namespace SchoopFunctionApp
                 }
 
                 Thread.Sleep(4000);
-                return setErrorCode(3);
+                return setFormatResult(setErrorCode(3));
             }
 
             catch (Exception ex)
@@ -495,11 +500,12 @@ namespace SchoopFunctionApp
                     //SendAlertToDevice(deviceID, ex.Message.Length > 200 ? ex.Message.Substring(0, 200) : ex.Message);
                 }
                 // Schoop.Domain.Utils.Helper.EmailHelper.SendErrorEmail("Set Active Years or Groups", ex.Message + "<br>" + ex.StackTrace + " - deviceID: " + deviceID + " - schoopID: " + schoopID + " - activeyears: " + activeyears);
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
         }
 
 
+        //https://schoopfunctionapp.azurewebsites.net/api/DeleteActiveYearsByDevice?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&schoopID=123&deviceID=1
         [FunctionName("DeleteActiveYearsByDevice")]
         public static async Task<object> DeleteActiveYearsByDevice(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -536,10 +542,10 @@ namespace SchoopFunctionApp
                 //delete the groups associated with that device
                 _dataServices.DeleteActiveGroups(dId, schId);
 
-                return new
+                return setFormatResult(new
                 {
                     res = 1
-                };
+                });
             }
             catch (Exception ex)
             {
@@ -552,6 +558,7 @@ namespace SchoopFunctionApp
             }
         }
 
+        //https://schoopfunctionapp.azurewebsites.net/api/GetSchoolsByTownId?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&townId=5236
         [FunctionName("GetSchoolsByTownId")]
         public static async Task<object> GetSchoolsByTownId(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -582,11 +589,11 @@ namespace SchoopFunctionApp
                 {
                     schoolData.Add(new schoolsFromTownID(item.EstablishmentName.ToString(), item.SchoopID));
                 }
-                return new
+                return setFormatResult(new
                 {
                     res = 1,
                     data = schoolData.ToArray()
-                };
+                });
             }
             catch (Exception)
             {
@@ -594,6 +601,7 @@ namespace SchoopFunctionApp
             }
         }
 
+        //https://schoopfunctionapp.azurewebsites.net/api/GetNews?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&deviceID=1&schoopID=123&school_news_id=1&languageID=1
         [FunctionName("GetNews")]
         public static async Task<object> GetNews(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -616,22 +624,22 @@ namespace SchoopFunctionApp
             int dId = 0;
             if (!int.TryParse(deviceID, out dId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             int schId = 0;
             if (!int.TryParse(schoopID, out schId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             int newsId = 0;
             if (!int.TryParse(school_news_id, out newsId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             int langId = 0;
             if (!int.TryParse(languageID, out langId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             try
             {
@@ -671,18 +679,18 @@ namespace SchoopFunctionApp
 
                 if (validNews.Count > 0)
                 {
-                    return new
+                    return setFormatResult(new
                     {
                         res = 1,
                         data = validNews.ToArray()
-                    };
+                    });
                 }
                 else
                 {
-                    return new
+                    return setFormatResult(new
                     {
                         res = 7
-                    };
+                    });
                 }
             }
             catch (Exception ex)
@@ -692,13 +700,14 @@ namespace SchoopFunctionApp
                 {
                     message += "-Inner exception: " + ex.InnerException.Message;
                 }
-                return new
+                return setFormatResult(new
                 {
                     res = 0
-                };
+                });
             }
         }
 
+        //https://schoopfunctionapp.azurewebsites.net/api/GetEvents?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&deviceID=1&schoopID=123&event_id=1&languageID=1
         [FunctionName("GetEvents")]
         public static async Task<object> GetEvents(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -721,22 +730,22 @@ namespace SchoopFunctionApp
             int dId = 0;
             if (!int.TryParse(deviceID, out dId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             int schId = 0;
             if (!int.TryParse(schoopID, out schId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             int eventId = 0;
             if (!int.TryParse(event_id, out eventId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             int langId = 0;
             if (!int.TryParse(languageID, out langId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             try
             {
@@ -753,10 +762,10 @@ namespace SchoopFunctionApp
 
                 if (events.Count == 0)
                 {
-                    return new
+                    return setFormatResult(new
                     {
                         res = 7
-                    };
+                    });
                 }
 
                 var customFormat = _dataServices.GetSchoolDateFormat(schId);
@@ -787,18 +796,18 @@ namespace SchoopFunctionApp
 
                 if (validEvents.Count == 0)
                 {
-                    return new
+                    return setFormatResult(new
                     {
                         res = 7
-                    };
+                    });
                 }
 
-                return new
+                return setFormatResult(new
                 {
                     res = 1,
                     sID = schoopID,
                     data = validEvents.ToArray()
-                };
+                });
             }
             catch (Exception ex)
             {
@@ -808,13 +817,14 @@ namespace SchoopFunctionApp
                     message += "-Inner exception: " + ex.InnerException.Message;
                 }
                 // Schoop.Domain.Utils.Helper.EmailHelper.SendErrorEmail("GetEvents( " + deviceID + ", " + schoopID + ", " + event_id + ", " + languageID + " )", message);
-                return new
+                return setFormatResult(new
                 {
                     res = 0
-                };
+                });
             }
         }
 
+        //https://schoopfunctionapp.azurewebsites.net/api/GetEventByID?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&eventId=1
         [FunctionName("GetEventByID")]
         public static async Task<object> GetEventByID(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -903,7 +913,7 @@ namespace SchoopFunctionApp
                     eventBody.Append("<p>" + schoolEvent.Event_text + "</p>");
                     eventBody.Append("</div>");
 
-                    return new
+                    return setFormatResult(new
                     {
                         res = 1,
                         years = eventYears.ToString(),
@@ -919,15 +929,14 @@ namespace SchoopFunctionApp
                         //eEndDate2 = schoolEvent.Event_end_date.ToString("yyyy-MM-dd"),
                         //eStartTime = schoolEvent.Event_start_time.ToString("hh:mm:ss"),
                         // eEndTime = schoolEvent.Event_end_time.ToString("hh:mm:ss")
-                    };
+                    });
                 }
                 else
                 {
-                    return new
-
+                    return setFormatResult(new
                     {
                         res = 0
-                    };
+                    });
                 }
             }
             catch (Exception ex)
@@ -942,6 +951,7 @@ namespace SchoopFunctionApp
             return null;
         }
 
+        //https://schoopfunctionapp.azurewebsites.net/api/GetNewsArticleByID?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&school_news_id=1
         [FunctionName("GetNewsArticleByID")]
         public static async Task<object> GetNewsArticleByID(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -973,7 +983,8 @@ namespace SchoopFunctionApp
                     {
                         dateFormat = schoolDateFormat;
                     }
-                    return new
+
+                    return setFormatResult(new
                     {
                         res = 1,
                         newsyears = schoolNews.school_news_active_years,
@@ -981,11 +992,11 @@ namespace SchoopFunctionApp
                         //newsbody = "<h1>" + schoolNews.school_news_headline + "</h1>" + "<p>" + schoolNews.school_news_active_years + "<br />" + schoolNews.ActiveGroups.ToActiveGroupNames(schoolNews.Language_id??1) + "</p><p><strong>" + schoolNews.school_news_date.ToString("dd/MM/yyyy") + "</strong></p>" + "<p>" + schoolNews.school_news_article + "</p>"
                         newsbody = "<h1>" + schoolNews.school_news_headline + "</h1><p><strong>" + schoolNews.school_news_date.ToString(dateFormat) + "</strong></p>" + "<p>" + schoolNews.school_news_article + "</p>"// + googleCode
 
-                    };
+                    });
                 }
                 else
                 {
-                    return new { res = 0 };
+                    return setFormatResult(new { res = 0 });
                     //return setErrorCode(0);
                 }
             }
@@ -1000,6 +1011,7 @@ namespace SchoopFunctionApp
             return null;
         }
 
+        //https://schoopfunctionapp.azurewebsites.net/api/GetNewAlerts?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&schoop_id=123&device_id=1&alert_id=1
         [FunctionName("GetNewAlerts")]
         public static async Task<object> GetNewAlerts(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -1020,17 +1032,17 @@ namespace SchoopFunctionApp
             int dId = 0;
             if (!int.TryParse(device_id, out dId)) //null device ID
             {
-                return new { res = 5 };
+                return setFormatResult(new { res = 5 });
             }
             int schId = 0;
             if (!int.TryParse(schoop_id, out schId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             int alertId = 0;
             if (!int.TryParse(alert_id, out alertId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             
             try
@@ -1054,7 +1066,7 @@ namespace SchoopFunctionApp
                 }
                 else
                 {
-                    return new { res = 7 };
+                    return setFormatResult(new { res = 7 });
                 }
 
                 //if alert_id ==0, it will return the highest alert_id record
@@ -1103,25 +1115,25 @@ namespace SchoopFunctionApp
 
                 if (validAlerts.Count == 0)
                 {
-                    return new { res = 7 };//setErrorCode(7);
+                    return setFormatResult(new { res = 7 });//setErrorCode(7);
                 }
                 else if (alertId == 0)
                 {
-                    return new
+                    return setFormatResult(new
                     {
                         res = 0,
                         schoopID = schoop_id,
                         alert_id = validAlerts[0].Alert_ID
-                    };
+                    });
                 }
                 else
                 {
-                    return new
+                    return setFormatResult(new
                     {
                         res = 1,
                         schoopID = schoop_id,
                         data = validAlerts.ToArray()
-                    };
+                    });
                 }
             }
             catch (Exception ex)
@@ -1132,9 +1144,10 @@ namespace SchoopFunctionApp
                     message += "-Inner exception: " + ex.InnerException.Message;
                 }
             }
-            return new { res = 7 };
+            return setFormatResult(new { res = 7 });
         }
 
+        //https://schoopfunctionapp.azurewebsites.net/api/GetAlertById?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&alert_id=1
         [FunctionName("GetAlertById")]
         public static async Task<object> GetAlertById(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -1149,7 +1162,7 @@ namespace SchoopFunctionApp
             int alertId = 0;
             if (!int.TryParse(alert_id, out alertId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             try
             {
@@ -1162,7 +1175,7 @@ namespace SchoopFunctionApp
                 var strJSON = new List<SchoolAlerts> { };
                 if (null == schoolAlert)
                 {
-                    return setErrorCode(0);
+                    return setFormatResult(setErrorCode(0));
                 }
                 else
                 {
@@ -1196,11 +1209,11 @@ namespace SchoopFunctionApp
                     strJSON.Add(new SchoolAlerts(schoolAlert.Alert_id, alertTime, schoolAlert.Activeyears, activeGroupNames, schoolAlert.Alert_urgent, schoolAlert.Alert_text, schoolAlert.NewsId ?? 0, schoolAlert.EventId ?? 0, fid, schoolAlert.suggestedSchoopID.HasValue ? schoolAlert.suggestedSchoopID.Value : 0));
                 }
 
-                return new
+                return setFormatResult(new
                 {
                     res = 1,
                     data = strJSON.ToArray()
-                };
+                });
             }
             catch (Exception ex)
             {
@@ -1213,6 +1226,7 @@ namespace SchoopFunctionApp
             }
         }
 
+        //https://schoopfunctionapp.azurewebsites.net/api/GetCollatedAlerts?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&device_id=1
         [FunctionName("GetCollatedAlerts")]
         public static async Task<object> GetCollatedAlerts(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -1359,6 +1373,7 @@ namespace SchoopFunctionApp
             return null;
         }
 
+        //https://schoopfunctionapp.azurewebsites.net/api/DeviceLanguageUpdate?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&deviceID=1&languageID=2
         [FunctionName("DeviceLanguageUpdate")]
         public static async Task<object> DeviceLanguageUpdate(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -1410,6 +1425,7 @@ namespace SchoopFunctionApp
             };
         }
 
+        //https://schoopfunctionapp.azurewebsites.net/api/GetMySchools?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&device_id=1
         [FunctionName("GetMySchools")]
         public static async Task<object> GetMySchools(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -1484,6 +1500,7 @@ namespace SchoopFunctionApp
             return null;
         }
 
+        //https://schoopfunctionapp.azurewebsites.net/api/GetGroups?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&schoopID=123
         [FunctionName("GetGroups")]
         public static async Task<object> GetGroups(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -1583,6 +1600,7 @@ namespace SchoopFunctionApp
             return null;
         }
 
+        //https://schoopfunctionapp.azurewebsites.net/api/GetGroups2?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&schoopID=123
         [FunctionName("GetGroups2")]
         public static async Task<object> GetGroups2(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -1648,6 +1666,7 @@ namespace SchoopFunctionApp
             return null;
         }
 
+        //https://schoopfunctionapp.azurewebsites.net/api/GetGroups3?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&schoopID=123&languageID=1
         [FunctionName("GetGroups3")]
         public static async Task<object> GetGroups3(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -1742,6 +1761,7 @@ namespace SchoopFunctionApp
             return null;
         }
 
+        //https://schoopfunctionapp.azurewebsites.net/api/SetActiveGroupsByDevice?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&schoopID=123&deviceID=1&activeGroups=|2056|2057|
         [FunctionName("SetActiveGroupsByDevice")]
         public static async Task<object> SetActiveGroupsByDevice(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -1832,6 +1852,7 @@ namespace SchoopFunctionApp
             }
         }
 
+        //https://schoopfunctionapp.azurewebsites.net/api/GetActiveYears?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&schoopID=123&deviceID=1
         [FunctionName("GetActiveYears")]
         public static async Task<object> GetActiveYears(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -1884,6 +1905,7 @@ namespace SchoopFunctionApp
             }
         }
 
+        //https://schoopfunctionapp.azurewebsites.net/api/GetMyGroups?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&schoopID=123&deviceID=1
         [FunctionName("GetMyGroups")]
         public static async Task<object> GetMyGroups(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -1931,6 +1953,7 @@ namespace SchoopFunctionApp
             }
         }
 
+        //https://schoopfunctionapp.azurewebsites.net/api/GetStickyForms?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&schoopID=123&deviceID=1
         [FunctionName("GetStickyForms")]
         public static async Task<object> GetStickyForms(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -1996,6 +2019,7 @@ namespace SchoopFunctionApp
 
         }
 
+        //https://schoopfunctionapp.azurewebsites.net/api/SetActiveYearsTest?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&schoopID=123&deviceID=1&activeyears=|1|2|3|4|
         [FunctionName("SetActiveYearsTest")]
         public static async Task<object> SetActiveYearsTest(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -2110,6 +2134,7 @@ namespace SchoopFunctionApp
             }
         }
 
+        //https://schoopfunctionapp.azurewebsites.net/api/GetMySubscription?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&deviceID=1
         [FunctionName("GetMySubscription")]
         public static async Task<object> GetMySubscription(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -2162,6 +2187,11 @@ namespace SchoopFunctionApp
         }
 
         #region public functions
+
+        public static object setFormatResult(object result)
+        {
+            return new { d = result };
+        }
 
         public static object setErrorCode(int errID)
         {
