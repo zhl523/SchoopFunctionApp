@@ -647,7 +647,8 @@ namespace SchoopFunctionApp.Services
                         school_news_id = (int)reader["school_news_id"],
                         school_news_date = (DateTime)reader["school_news_date"],
                         school_news_headline = reader["school_news_headline"].ToString(),
-                        school_news_active_years = reader["school_news_active_years"].ToString()
+                        school_news_active_years = reader["school_news_active_years"].ToString(),
+                        Published = (bool)reader["Published"],
                     };
                     list.Add(news);
                 }
@@ -675,10 +676,17 @@ namespace SchoopFunctionApp.Services
                     var events = new tbl_school_events()
                     {
                         Event_id = (int)reader["Event_id"],
+                        Event_start_date = (DateTime)reader["Event_start_date"],
                         Event_end_date = (DateTime)reader["Event_end_date"],
+                        Event_start_time = (DateTime)reader["Event_start_time"],
+                        Event_end_time = (DateTime)reader["Event_end_time"],
+                        Event_title = reader["Event_title"].ToString(),
+                        Event_location = reader["Event_location"].ToString(),
+                        Event_text = reader["Event_text"].ToString(),
                         Event_cost = reader["Event_cost"] is DBNull ? null : (decimal?)reader["Event_cost"],
                         ActiveYears = reader["ActiveYears"].ToString(),
                         ActiveGroups = reader["ActiveGroups"].ToString(),
+
                     };
                     list.Add(events);
                 }
