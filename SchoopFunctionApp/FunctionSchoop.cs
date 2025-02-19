@@ -1350,16 +1350,16 @@ namespace SchoopFunctionApp
 
                 if (validAlerts.Count == 0)
                 {
-                    return new { res = 7 };//setErrorCode(7);
+                    return setFormatResult(new { res = 7 });//setErrorCode(7);
                 }
                 else
                 {
-                    return new
+                    return setFormatResult(new
                     {
                         res = 1,
                         deviceId = device_id,
                         data = validAlerts.ToArray()
-                    };
+                    });
                 }
             }
             catch (Exception ex)
@@ -1390,12 +1390,12 @@ namespace SchoopFunctionApp
             int dId = 0;
             if (!int.TryParse(deviceID, out dId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             int langId = 0;
             if (!int.TryParse(languageID, out langId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
 
             if (_dataServices == null)
@@ -1412,17 +1412,17 @@ namespace SchoopFunctionApp
                 //Update tbl_devices
                 if (_dataServices.UpdateDeviceLangId(dId, langId))
                 {
-                    return new
+                    return setFormatResult(new
                     {
                         res = 1,
-                    };
+                    });
                 }
             }
 
-            return new
+            return setFormatResult(new
             {
                 res = 0,
-            };
+            });
         }
 
         //https://schoopfunctionapp.azurewebsites.net/api/GetMySchools?code=nIacxDMNLbY2o80PG-glcnlMqratstSCVleK5r6312R4AzFu-F4LdA%3D%3D&device_id=1
@@ -1477,16 +1477,16 @@ namespace SchoopFunctionApp
 
                 if (schools.Count == 0)
                 {
-                    return new { res = 7 };//setErrorCode(7);
+                    return setFormatResult(new { res = 7 });//setErrorCode(7);
                 }
                 else
                 {
-                    return new
+                    return setFormatResult(new
                     {
                         res = 1,
                         deviceId = device_id,
                         data = schools.ToArray()
-                    };
+                    });
                 }
             }
             catch (Exception ex)
@@ -1515,7 +1515,7 @@ namespace SchoopFunctionApp
             int schId = 0;
             if (!int.TryParse(schoopID, out schId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             try
             {
@@ -1566,7 +1566,7 @@ namespace SchoopFunctionApp
                                 results.Add(activeGroup);
                             }
                         }
-                        return results.ToArray();
+                        return setFormatResult(results.ToArray());
                     }
                     else
                     {
@@ -1579,12 +1579,12 @@ namespace SchoopFunctionApp
                             var groupName = _dataServices.GetDefaultGroupName(group.groupID);
                             resultNoYears.groups.Add(new Models.Group(group.groupID, groupName != null ? groupName.groupName : "", updateTime));
                         }
-                        return resultNoYears;
+                        return setFormatResult(resultNoYears);
                     }
                 }
                 else
                 {
-                    return new { res = 7 };//setErrorCode(7);
+                    return setFormatResult(new { res = 7 });//setErrorCode(7);
                 }
 
             }
@@ -1615,7 +1615,7 @@ namespace SchoopFunctionApp
             int schId = 0;
             if (!int.TryParse(schoopID, out schId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             try
             {
@@ -1647,11 +1647,11 @@ namespace SchoopFunctionApp
                         }
                         result.parentGroups.Add(parentItem);
                     }
-                    return result;
+                    return setFormatResult(result);
                 }
                 else
                 {
-                    return new { res = 7 };//setErrorCode(7);
+                    return setFormatResult(new { res = 7 });//setErrorCode(7);
                 }
 
             }
@@ -1682,12 +1682,12 @@ namespace SchoopFunctionApp
             int schId = 0;
             if (!int.TryParse(schoopID, out schId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             int langId = 0;
             if (!int.TryParse(languageID, out langId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             try
             {
@@ -1741,11 +1741,11 @@ namespace SchoopFunctionApp
                         }
                         result.parentGroups.Add(parentItem);
                     }
-                    return result;
+                    return setFormatResult(result);
                 }
                 else
                 {
-                    return new { res = 7 };//setErrorCode(7);
+                    return setFormatResult(new { res = 7 });//setErrorCode(7);
                 }
 
             }
@@ -1779,12 +1779,12 @@ namespace SchoopFunctionApp
             int schId = 0;
             if (!int.TryParse(schoopID, out schId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             int dId = 0;
             if (!int.TryParse(deviceID, out dId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             try
             {
@@ -1797,7 +1797,7 @@ namespace SchoopFunctionApp
                 {
                     _dataServices.SetActiveGroups(dId, schId, groups);
 
-                    return setErrorCode(3);
+                    return setFormatResult(setErrorCode(3));
                 }
                 groups.AddRange(from @group in activeGroups.Split('|') where !string.IsNullOrEmpty(@group) select int.Parse(@group));
 
@@ -1805,13 +1805,13 @@ namespace SchoopFunctionApp
                 var device = _dataServices.GetDeviceByDeviceId(dId);
                 if (device == null)
                 {
-                    return new { res = 0 };
+                    return setFormatResult(new { res = 0 });
                 }
 
                 if (schId != 9999)
                 {
                     Thread.Sleep(4000); //sleep 8 seconds on 20160113
-                    return setErrorCode(3);
+                    return setFormatResult(setErrorCode(3));
                 }
                 //send alert back to device
                 var alert = new tbl_school_alerts()
@@ -1827,7 +1827,7 @@ namespace SchoopFunctionApp
                 };
                 _dataServices.InsertAlert(alert);
 
-                return setErrorCode(3);
+                return setFormatResult(setErrorCode(3));
             }
 
             catch (Exception ex)
@@ -1848,7 +1848,7 @@ namespace SchoopFunctionApp
 
                     _dataServices.InsertAlert(alert);
                 }
-                return new { res = 0 };
+                return setFormatResult(new { res = 0 });
             }
         }
 
@@ -1868,12 +1868,12 @@ namespace SchoopFunctionApp
             int schId = 0;
             if (!int.TryParse(schoopID, out schId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             int dId = 0;
             if (!int.TryParse(deviceID, out dId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             try
             {
@@ -1885,7 +1885,7 @@ namespace SchoopFunctionApp
                 var aybd = _dataServices.GetActiveYearBySchoopIDAndDeviceID(schId, dId);
                 if (school == null)
                 {
-                    return setErrorCode(0);
+                    return setFormatResult(setErrorCode(0));
                 }
                 var sLow = "";
                 var sHigh = "";
@@ -1897,11 +1897,11 @@ namespace SchoopFunctionApp
                 sLow = school.sLow;
                 sHigh = school.sHigh;
 
-                return new { sLow = sLow, sHigh = sHigh, activeYears = activeYears };
+                return setFormatResult(new { sLow = sLow, sHigh = sHigh, activeYears = activeYears });
             }
             catch (Exception)
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
         }
 
@@ -1921,12 +1921,12 @@ namespace SchoopFunctionApp
             int schId = 0;
             if (!int.TryParse(schoopID, out schId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             int dId = 0;
             if (!int.TryParse(deviceID, out dId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             try
             {
@@ -1937,7 +1937,7 @@ namespace SchoopFunctionApp
                 var groups = _dataServices.GetActiveGroupsBySchoopIdAndDeviceID(schId, dId);
                 if (groups.Count == 0)
                 {
-                    return setErrorCode(7);
+                    return setFormatResult(setErrorCode(7));
                 }
                 var result = new List<object>();
                 foreach (var g in groups)
@@ -1945,11 +1945,11 @@ namespace SchoopFunctionApp
                     result.Add(new { groupID = g.active_groupID });
                 }
 
-                return result;
+                return setFormatResult(result);
             }
             catch (Exception)
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
         }
 
@@ -1969,12 +1969,12 @@ namespace SchoopFunctionApp
             int schId = 0;
             if (!int.TryParse(schoopID, out schId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             int dId = 0;
             if (!int.TryParse(deviceID, out dId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             
             try
@@ -1986,7 +1986,7 @@ namespace SchoopFunctionApp
                 var device = _dataServices.GetDeviceByDeviceId(dId);
                 if (device == null)
                 {
-                    return setErrorCode(0);
+                    return setFormatResult(setErrorCode(0));
                 }
                 var yearStr = "0";
                 var groupStr = "0";
@@ -2006,15 +2006,15 @@ namespace SchoopFunctionApp
                 }
 
                 var stickForms = _dataServices.GetLibraryFormsBySchoopIdAndActiveYearsGroups(schId, dId, yearStr, groupStr, device.Language_id ?? 1, 100);
-                return new
+                return setFormatResult(new
                 {
                     res = 1,
                     data = (from form in stickForms select new Form { fTitle = form.Survey_Name, fDesc = form.Alert_text, fURL = "https://schoop.co.uk/survey/?s=" + form.SurveyGuid.ToString() + "&d=" + device.DeviceGuid.ToString() }).ToArray()
-                };
+                });
             }
             catch (Exception)
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
 
         }
@@ -2037,12 +2037,12 @@ namespace SchoopFunctionApp
             int schId = 0;
             if (!int.TryParse(schoopID, out schId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
             int dId = 0;
             if (!int.TryParse(deviceID, out dId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
 
             try
@@ -2055,7 +2055,7 @@ namespace SchoopFunctionApp
                 var device = _dataServices.GetDeviceByDeviceId(dId);
                 if (device == null)
                 {
-                    return setErrorCode(0);
+                    return setFormatResult(setErrorCode(0));
                 }
 
                 _dataServices.SetActiveYears(dId, schId, activeyears);
@@ -2107,7 +2107,7 @@ namespace SchoopFunctionApp
                 }
 
                 Thread.Sleep(4000);
-                return setErrorCode(3);
+                return setFormatResult(setErrorCode(3));
             }
 
             catch (Exception ex)
@@ -2130,7 +2130,7 @@ namespace SchoopFunctionApp
                     //SendAlertToDevice(deviceID, ex.Message.Length > 200 ? ex.Message.Substring(0, 200) : ex.Message);
                 }
                 // Schoop.Domain.Utils.Helper.EmailHelper.EmailHelper.SendErrorEmail("Set Active Years or Groups", ex.Message + "<br>" + ex.StackTrace + " - deviceID: " + deviceID + " - schoopID: " + schoopID + " - activeyears: " + activeyears);
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
         }
 
@@ -2148,7 +2148,7 @@ namespace SchoopFunctionApp
             int dId = 0;
             if (!int.TryParse(deviceID, out dId)) //null device ID
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
 
             try
@@ -2160,7 +2160,7 @@ namespace SchoopFunctionApp
                 var device = _dataServices.GetDeviceByDeviceId(dId);
                 if (device == null)
                 {
-                    return setErrorCode(0);
+                    return setFormatResult(setErrorCode(0));
                 }
                 var data1 = new
                 {
@@ -2173,16 +2173,16 @@ namespace SchoopFunctionApp
                     PhoneIsAuthed = device.PhoneIsAuthed,
                     Confirmed13 = device.Confirmed13
                 };
-                return new
+                return setFormatResult(new
                 {
                     res = 1,
                     deviceId = deviceID,
                     data = data1
-                };
+                });
             }
             catch (Exception)
             {
-                return setErrorCode(0);
+                return setFormatResult(setErrorCode(0));
             }
         }
 
