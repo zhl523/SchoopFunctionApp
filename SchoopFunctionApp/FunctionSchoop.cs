@@ -673,7 +673,8 @@ namespace SchoopFunctionApp
                         School_news_ID = item.school_news_id,
                         School_news_date = item.school_news_date.ToString(dateFormat),
                         School_news_headline = item.school_news_headline,
-                        School_news_active_years = item.school_news_active_years
+                        School_news_active_years = item.school_news_active_years,
+                        School_news_active_groups = item.ActiveGroups,
                     });
                 }
 

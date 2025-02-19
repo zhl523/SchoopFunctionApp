@@ -648,6 +648,7 @@ namespace SchoopFunctionApp.Services
                         school_news_date = (DateTime)reader["school_news_date"],
                         school_news_headline = reader["school_news_headline"].ToString(),
                         school_news_active_years = reader["school_news_active_years"].ToString(),
+                        ActiveGroups = reader["ActiveGroups"].ToString(),
                         Published = (bool)reader["Published"],
                     };
                     list.Add(news);
