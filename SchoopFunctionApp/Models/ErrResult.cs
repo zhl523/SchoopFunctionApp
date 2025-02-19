@@ -22,6 +22,11 @@ namespace SchoopFunctionApp.Models
         }
     }
 
+    public class NormalResult
+    {
+        public object d;
+    }
+
     //====================================================================
     // This is for creatign a JSOn object that passes the new device ID
     // created in the database to the device. This is our UUID for

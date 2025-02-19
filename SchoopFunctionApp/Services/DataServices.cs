@@ -332,7 +332,7 @@ namespace SchoopFunctionApp.Services
                               ,[device_id]
                               ,[schoop_id]
                               ,[active_years]
-                          FROM [schoop].[dbo].[tbl_active_years_by_device]
+                          FROM [dbo].[tbl_active_years_by_device]
                           WHERE device_id = @deviceId";
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@deviceId", deviceId);
@@ -361,7 +361,7 @@ namespace SchoopFunctionApp.Services
                               ,[device_id]
                               ,[schoop_id]
                               ,[active_years]
-                          FROM [schoop].[dbo].[tbl_active_years_by_device]
+                          FROM [dbo].[tbl_active_years_by_device]
                           WHERE device_id = @deviceId AND schoop_id = @schoopId";
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@deviceId", deviceId);

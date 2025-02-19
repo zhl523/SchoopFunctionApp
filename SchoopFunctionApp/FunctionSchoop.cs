@@ -2190,7 +2190,9 @@ namespace SchoopFunctionApp
 
         public static object setFormatResult(object result)
         {
-            return new { d = result };
+            var strResult = new NormalResult();
+            strResult.d = result;
+            return strResult;
         }
 
         public static object setErrorCode(int errID)
