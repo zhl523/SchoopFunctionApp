@@ -979,7 +979,7 @@ namespace SchoopFunctionApp
                 if ((null != schoolNews) && (schoolNews.school_news_active))
                 {
                     var dateFormat = "dd/MM/yyyy";
-                    var schoolDateFormat = _dataServices.GetSchoolTimeZoneName(schoolNews.schoopID);
+                    var schoolDateFormat = _dataServices.GetSchoolDateFormat(schoolNews.schoopID);
                     if(!string.IsNullOrEmpty(schoolDateFormat))
                     {
                         dateFormat = schoolDateFormat;

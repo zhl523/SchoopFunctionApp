@@ -738,7 +738,7 @@ namespace SchoopFunctionApp.Services
             {
                 return list;
             }
-            var strGroups = "(";
+            var strGroups = "";
             foreach (var group in groups)
             {
                 strGroups += group + ",";
@@ -751,10 +751,9 @@ namespace SchoopFunctionApp.Services
             using (SqlConnection connection = new SqlConnection(Environment.GetEnvironmentVariable("SqlConnectionString")))
             {
                 connection.Open();
-                var query = @"SELECT [groupName] FROM [dbo].[tbl_group_names] WHERE languID = @languageId and groupId in @groupIDs";
+                var query = @"SELECT [groupName] FROM [dbo].[tbl_group_names] WHERE languID = @languageId and groupId in (" + strGroups + ")";
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@languageId", languageId);
-                command.Parameters.AddWithValue("@groupIDs", strGroups);
 
                 var reader = command.ExecuteReaderAsync().Result;
                 while (reader.Read())
@@ -809,6 +808,7 @@ namespace SchoopFunctionApp.Services
                         Event_active = (bool)reader["Event_active"],
                         Language_id = (int)reader["Language_id"],
                         ActiveYears = reader["ActiveYears"].ToString(),
+                        ActiveGroups = reader["ActiveGroups"].ToString()
                     };
                     return events;
                 }
@@ -845,6 +845,7 @@ namespace SchoopFunctionApp.Services
                         school_news_date = (DateTime)reader["school_news_date"],
                         school_news_headline = reader["school_news_headline"].ToString(),
                         school_news_active_years = reader["school_news_active_years"].ToString(),
+                        school_news_active = (bool)reader["school_news_active"],
                         ActiveGroups = reader["ActiveGroups"].ToString()
                     };
                     return news;
