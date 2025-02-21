@@ -785,6 +785,7 @@ namespace SchoopFunctionApp.Services
                               ,[Event_active]
                               ,[Language_id]
                               ,[ActiveYears]
+                              ,[ActiveGroups]
                           FROM [dbo].[tbl_school_events]
                           WHERE [Event_id] = @eventId and [Deleted] = 0";
                 SqlCommand command = new SqlCommand(query, connection);
