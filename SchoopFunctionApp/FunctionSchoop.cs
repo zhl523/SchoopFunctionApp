@@ -806,7 +806,7 @@ namespace SchoopFunctionApp
                 return setFormatResult(new
                 {
                     res = 1,
-                    sID = schoopID,
+                    sID = schId,
                     data = validEvents.ToArray()
                 });
             }
@@ -2193,7 +2193,7 @@ namespace SchoopFunctionApp
         {
             var strResult = new NormalResult();
             strResult.d = result;
-            return strResult;
+            return JsonConvert.DeserializeObject(JsonConvert.SerializeObject(strResult));
         }
 
         public static object setErrorCode(int errID)
