@@ -388,6 +388,7 @@ namespace SchoopFunctionApp.Services
             {
                 connection.Open();
                 var query = @"SELECT [deviceID]
+                              ,[DeviceGuid]
                               ,[deviceToken]
                               ,[deviceTypeID]
                               ,[deviceOSVersion]
@@ -403,6 +404,7 @@ namespace SchoopFunctionApp.Services
                     var device = new tbl_devices()
                     {
                         deviceID = (int)reader["deviceID"],
+                        DeviceGuid = (Guid)reader["DeviceGuid"],
                         deviceTwitter = reader["deviceToken"].ToString(),
                         deviceTypeID = (byte)reader["deviceTypeID"],
                         deviceOSVersion = reader["deviceOSVersion"].ToString(),
@@ -847,7 +849,8 @@ namespace SchoopFunctionApp.Services
                         school_news_headline = reader["school_news_headline"].ToString(),
                         school_news_active_years = reader["school_news_active_years"].ToString(),
                         school_news_active = (bool)reader["school_news_active"],
-                        ActiveGroups = reader["ActiveGroups"].ToString()
+                        ActiveGroups = reader["ActiveGroups"].ToString(),
+                        school_news_article = reader["school_news_article"].ToString()
                     };
                     return news;
                 }
