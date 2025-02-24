@@ -863,7 +863,7 @@ namespace SchoopFunctionApp.Services
             using (SqlConnection connection = new SqlConnection(Environment.GetEnvironmentVariable("SqlConnectionString")))
             {
                 var query = @"IF EXISTS (select 1 from [dbo].[tbl_alerts_read] where [Alert_id] = @alertId and [deviceID] = @deviceId)
-                              Update [dbo].[tbl_alerts_read] set [[ReadTime]] = getdate() where [Alert_id] = @alertId and [deviceID] = @deviceId
+                              Update [dbo].[tbl_alerts_read] set [ReadTime] = getdate() where [Alert_id] = @alertId and [deviceID] = @deviceId
                               ELSE
                               Insert into [dbo].[tbl_alerts_read] ([Alert_id],[deviceID],[ReadTime]) values(@alertId, @deviceId, getdate())";
                 SqlCommand command = new SqlCommand(query, connection);
@@ -890,7 +890,7 @@ namespace SchoopFunctionApp.Services
                 var query = @"UPDATE [dbo].[tbl_devices] 
                                 SET [BadgeNumber] = 0
                                   ,[deviceActive] = 1
-                                  ,[[deviceLastAccessed]] = getdate()
+                                  ,[deviceLastAccessed] = getdate()
                              WHERE [deviceID] = @deviceID";
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@deviceID", deviceID);
