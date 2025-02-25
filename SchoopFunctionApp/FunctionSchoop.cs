@@ -457,7 +457,7 @@ namespace SchoopFunctionApp
 
 
                 //send private alert for contact form, added on 20161018
-                if (device.EmailIsAuthed == false && device.PhoneIsAuthed == false)
+                if (device.EmailIsAuthed == false && device.PhoneIsAuthed == false && schId != 2820) //not to insert alert if default 2820
                 {
                     var alert = new tbl_school_alerts()
                     {
@@ -2087,7 +2087,7 @@ namespace SchoopFunctionApp
 
 
                 //send private alert for contact form, added on 20161018
-                if (device.EmailIsAuthed == false && device.PhoneIsAuthed == false)
+                if (device.EmailIsAuthed == false && device.PhoneIsAuthed == false && schId != 2820)
                 {
                     var alert = new tbl_school_alerts()
                     {
