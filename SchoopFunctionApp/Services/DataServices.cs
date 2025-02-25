@@ -529,7 +529,7 @@ namespace SchoopFunctionApp.Services
                                ,0
                                ,0
                                ,0
-                               ,0
+                               ,@IsContactFormAlert
                                ,0
                                ,0
                                ,0);
@@ -546,6 +546,7 @@ namespace SchoopFunctionApp.Services
                 command.Parameters.AddWithValue("@ToSendTime", alert.ToSendTime);
                 command.Parameters.AddWithValue("@SendByDeviceIds", alert.SendByDeviceIds);
                 command.Parameters.AddWithValue("@DeviceIds", alert.DeviceIds);
+                command.Parameters.AddWithValue("@IsContactFormAlert", alert.IsContactFormAlert);
 
                 try
                 {
