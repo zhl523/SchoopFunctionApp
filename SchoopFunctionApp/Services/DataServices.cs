@@ -949,7 +949,6 @@ namespace SchoopFunctionApp.Services
         {
             using (SqlConnection connection = new SqlConnection(Environment.GetEnvironmentVariable("SqlConnectionString")))
             {
-                connection.Open();
                 var query = @"SELECT count(0) FROM [dbo].[tbl_surveys] s 
 	                        INNER JOIN [dbo].[tbl_questions] q 
 	                        ON s.Survey_ID = q.Survey_ID 
@@ -1007,7 +1006,6 @@ namespace SchoopFunctionApp.Services
         {
             using (SqlConnection connection = new SqlConnection(Environment.GetEnvironmentVariable("SqlConnectionString")))
             {
-                connection.Open();
                 var query = @"SELECT count(0) FROM [dbo].[tbl_organisation_groups] 
 	                        WHERE [schoopID] = @schoopId and [Deleted] = 0";
                 SqlCommand command = new SqlCommand(query, connection);
