@@ -4,7 +4,7 @@
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_INPROC_NET8_ENABLED": "1",
     "SqlConnectionString": "data source=df9ykwfha1.database.windows.net;initial catalog=SCHOOP_DEAD;user id=schoop;password=Sch565$$-jXsw;persist security info=False;Connection Timeout=180;multipleactiveresultsets=True;App=EntityFramework;",
-    "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=schoopstorage;AccountKey=iT2Q7VI6d5+YX1nDxlP/GMuL4MckSLJF5tdYCei8Gi+FHDgRVddEYFEUKWPJcyIDw9Aug6X8uP4m0CNcb+HJLQ==",
+    "AzureWebJobsStorageLatLong": "DefaultEndpointsProtocol=https;AccountName=schoopstorage;AccountKey=iT2Q7VI6d5+YX1nDxlP/GMuL4MckSLJF5tdYCei8Gi+FHDgRVddEYFEUKWPJcyIDw9Aug6X8uP4m0CNcb+HJLQ==",
     //"SqlConnectionString": "Data Source=.;Initial Catalog=schoop;Integrated Security=False;Persist Security Info=False;User ID=sa;Password=nova123;Connection Timeout=400000;MultipleActiveResultSets=True;TrustServerCertificate=True",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet"
   }

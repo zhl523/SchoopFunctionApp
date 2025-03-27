@@ -67,7 +67,7 @@ namespace SchoopFunctionApp
             try
             {
                 // 使用Azure Functions的环境变量
-                var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
+                var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorageLatLong");
 
                 var blobServiceClient = new BlobServiceClient(connectionString);
                 var containerClient = blobServiceClient.GetBlobContainerClient(_containerName);
@@ -93,7 +93,7 @@ namespace SchoopFunctionApp
         public static async Task AppendJsonToBlobAsync(DemoDevice device)
         {
             // 使用Azure Functions的环境变量
-            var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
+            var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorageLatLong");
 
             var blobServiceClient = new BlobServiceClient(connectionString);
             var containerClient = blobServiceClient.GetBlobContainerClient(_containerName);
@@ -118,7 +118,7 @@ namespace SchoopFunctionApp
 
         public static async Task AppendJsonObjectWithConcurrencyControlAsync(DemoDevice device)
         {
-            var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
+            var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorageLatLong");
 
             var blobServiceClient = new BlobServiceClient(connectionString);
             var containerClient = blobServiceClient.GetBlobContainerClient(_containerName);
@@ -176,7 +176,7 @@ namespace SchoopFunctionApp
 
         public static async Task WriteJsonToBlobAsync(DemoDevice device)
         {
-            var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
+            var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorageLatLong");
 
             var blobServiceClient = new BlobServiceClient(connectionString);
             var containerClient = blobServiceClient.GetBlobContainerClient(_containerName);
@@ -194,7 +194,7 @@ namespace SchoopFunctionApp
 
         public static async Task DownloadAndRewriteJsonToBlobAsync(DemoDevice device)
         {
-            var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
+            var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorageLatLong");
 
             var blobServiceClient = new BlobServiceClient(connectionString);
             var containerClient = blobServiceClient.GetBlobContainerClient(_containerName);
