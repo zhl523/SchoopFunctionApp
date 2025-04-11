@@ -25,6 +25,7 @@ using Azure.Storage.Blobs.Specialized;
 using Azure.Storage.Blobs.Models;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace SchoopFunctionApp
 {
@@ -88,6 +89,29 @@ namespace SchoopFunctionApp
                 log.LogError($"Error reading JSON blob: {ex.Message}");
                 return new BadRequestObjectResult("Error processing the request");
             }
+        }
+
+        [FunctionName("DeleteLatLongById")]
+        public static async Task<IActionResult> DeleteLatLongById(
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+            ILogger log)
+        {
+            log.LogInformation("C# HTTP trigger function processed a request.");
+
+            string id = req.Query["id"];
+
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            dynamic data = JsonConvert.DeserializeObject(requestBody);
+            id = id ?? data?.id;
+
+            if (string.IsNullOrEmpty(id))
+            {
+                return new OkObjectResult("ID is null, nothing to be deleted.");
+            }
+
+            await DeleteByIdAndRewriteJsonToBlobAsync(id);
+
+            return new OkObjectResult("Device ID - " + id + " has been deleted from blob successfully.");
         }
 
         public static async Task AppendJsonToBlobAsync(DemoDevice device)
@@ -213,6 +237,7 @@ namespace SchoopFunctionApp
                 if (jsonData is JArray array)
                 {
                     array.Add(JObject.FromObject(device));
+                    
                     jsonContent = JsonConvert.SerializeObject(array, Formatting.Indented);
                 }
             }
@@ -226,6 +251,43 @@ namespace SchoopFunctionApp
                 }
             }
             
+        }
+
+        public static async Task DeleteByIdAndRewriteJsonToBlobAsync(string deviceId)
+        {
+            var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorageLatLong");
+
+            var blobServiceClient = new BlobServiceClient(connectionString);
+            var containerClient = blobServiceClient.GetBlobContainerClient(_containerName);
+            var blobClient = containerClient.GetBlobClient(_blobName);
+
+            var stream = await blobClient.DownloadStreamingAsync();
+            string jsonContent = "";
+
+            using (StreamReader reader = new StreamReader(stream.Value.Content))
+            {
+                jsonContent = await reader.ReadToEndAsync();
+
+                // 反序列化JSON数组
+                var devices = JsonConvert.DeserializeObject<List<DemoDevice>>(jsonContent);
+
+                // remove the objects with ID
+                devices.RemoveAll(p => p.ID == deviceId);
+
+                // 重新序列化为 JSON
+                jsonContent = JsonConvert.SerializeObject(devices, Formatting.Indented);
+
+            }
+
+            if (!string.IsNullOrEmpty(jsonContent))
+            {
+                // 上传到Blob
+                using (var newstream = new MemoryStream(Encoding.UTF8.GetBytes(jsonContent)))
+                {
+                    await blobClient.UploadAsync(newstream, overwrite: true);
+                }
+            }
+
         }
 
         public class DemoDevice
