@@ -152,7 +152,15 @@ namespace SchoopFunctionApp.Services
                                ,1);
                                 SELECT SCOPE_IDENTITY();";
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@deviceToken", deviceToken);
+                if (string.IsNullOrEmpty(deviceToken)) 
+                {
+                    command.Parameters.AddWithValue("@deviceToken", DBNull.Value);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@deviceToken", deviceToken);
+                }
+                
                 command.Parameters.AddWithValue("@deviceTypeID", deviceTypeID);
                 command.Parameters.AddWithValue("@deviceOSVersion", deviceOSVersion);
                 command.Parameters.AddWithValue("@languageID", languageID);
